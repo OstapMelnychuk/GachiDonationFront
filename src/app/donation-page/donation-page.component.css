@@ -1,0 +1,8 @@
+button.btn.btn-outline-secondary {
+  height: 40px;
+  white-space: nowrap;
+}
+
+textarea {
+  resize: none;
+}

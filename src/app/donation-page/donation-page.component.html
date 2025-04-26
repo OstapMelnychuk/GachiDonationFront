@@ -1,0 +1,53 @@
+<div class="d-flex justify-content-center align-items-center vh-100">
+  <form #f="ngForm" (ngSubmit)="onSubmit(f)" class="w-100" style="max-width: 700px;">
+    <div class="form-group mb-3">
+      <input class="form-control" name="donatorNickname" #donatorNicknameInput="ngModel" [(ngModel)]="donatorNickname"
+             id="donatorName" placeholder="Enter your nickname" [required]="true" [maxlength]="30">
+      <div *ngIf="donationMessageInput.invalid && donationMessageInput.touched" class="text-danger mt-1 small">
+        <div *ngIf="donatorNicknameInput.errors?.['required']">Nickname is required.</div>
+        <div *ngIf="donatorNicknameInput.errors?.['maxlength']">Max length is 30 characters.</div>
+      </div>
+    </div>
+
+    <div class="form-group mb-3">
+  <textarea class="form-control"
+            name="donationMessage"
+            [(ngModel)]="donationMessage"
+            id="donationInput"
+            [required]="true"
+            [maxlength]="150"
+            [pattern]="'^(?!.*(?:http:\/\/|https:\/\/|www\.|\.com|\.net|\.ua)).*$'"
+            #donationMessageInput="ngModel"
+            placeholder="Enter donation"
+            rows="3"></textarea>
+      <div *ngIf="donationMessageInput.invalid && donationMessageInput.touched" class="text-danger mt-1 small">
+        <div *ngIf="donationMessageInput.errors?.['required']">Donation message is required.</div>
+        <div *ngIf="donationMessageInput.errors?.['maxlength']">Max length is 150 characters.</div>
+        <div *ngIf="donationMessageInput.errors?.['pattern']">URLs are not allowed in the message.</div>
+      </div>
+    </div>
+    <div class="container mb-3">
+      <div class="row" *ngFor="let row of gachiPhrasesGrid">
+        <div class="col" *ngFor="let phrase of row">
+          <button type="button"
+                  class="btn btn-outline-secondary btn-sm mb-2 w-100 d-flex align-items-center justify-content-between"
+                  (click)="addPhraseToMessage(phrase)">
+            <span class="text-truncate d-block flex-grow-1 me-2" style="overflow: hidden;">
+              {{ phrase }}
+            </span>
+            <span (click)="playPhraseAudio(phrase); $event.stopPropagation()" class="ms-2">▶️</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="d-flex justify-content-center mt-3">
+      <button type="button" (click)="testPhrase()" class="btn btn-primary w-50" [disabled]="f.invalid">Listen to your
+        donation
+      </button>
+    </div>
+    <div class="d-flex justify-content-center mt-3">
+      <button type="submit" class="btn btn-primary w-50" [disabled]="f.invalid">Submit</button>
+    </div>
+  </form>
+</div>
