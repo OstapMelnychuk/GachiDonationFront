@@ -1,0 +1,16 @@
+{
+  "TITLE": "Gachi Donations",
+  "SUBTITLE": "Support your favorite stream with style and legendary phrases 💬",
+  "NICKNAME_PLACEHOLDER": "Enter your nickname",
+  "DONATION_PLACEHOLDER": "Enter donation",
+  "LISTEN_BUTTON": "🎧 Listen to your donation",
+  "SUBMIT_BUTTON": "💸 Submit",
+  "FOOTER": "Made with 💜 for the Gachi community",
+  "VALIDATION": {
+    "REQUIRED_NICKNAME": "Nickname is required.",
+    "MAXLENGTH_NICKNAME": "Max length is 30 characters.",
+    "REQUIRED_MESSAGE": "Donation message is required.",
+    "MAXLENGTH_MESSAGE": "Max length is 150 characters.",
+    "INVALID_LINK": "URLs are not allowed in the message."
+  }
+}

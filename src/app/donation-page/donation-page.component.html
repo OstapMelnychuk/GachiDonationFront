@@ -1,32 +1,52 @@
 <div class="d-flex justify-content-center align-items-center min-vh-100">
-  <div class="container form-wrapper" style="max-width: 700px; width: 100%;">
-<!--    <div class="text-center mb-4 gachi-header">-->
-<!--      <h1 class="gachi-title">Gachi Donations</h1>-->
-<!--      <p class="gachi-subtitle">Support your favorite stream with style and legendary phrases 💬</p>-->
+  <div class="container form-wrapper" style="max-width: 1024px; width: 100%;">
+
+<!--    <div class="d-flex justify-content-end mb-3">-->
+<!--      <button (click)="switchLanguage('en')" class="btn btn-link p-0">-->
+<!--        <img ngSrc="https://flagcdn.com/w40/gb.png" width="30" height="20" alt="English flag">-->
+<!--      </button>-->
+<!--      <button (click)="switchLanguage('ua')" class="btn btn-link p-0 ms-2">-->
+<!--        <img ngSrc="https://flagcdn.com/w40/ua.png" width="30" height="20" alt="Ukrainian flag">-->
+<!--      </button>-->
 <!--    </div>-->
+
+    <div class="dropdown">
+      <button class="btn btn-link dropdown-toggle" type="button" id="languageDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+        <img *ngIf="currentLang === 'en'" src="https://flagcdn.com/w40/gb.png" width="30" height="20" alt="English flag">
+        <img *ngIf="currentLang === 'ua'" src="https://flagcdn.com/w40/ua.png" width="30" height="20" alt="Ukrainian flag">
+      </button>
+      <ul class="dropdown-menu" aria-labelledby="languageDropdown">
+        <li>
+          <a class="dropdown-item" href="#" (click)="switchLanguage('en')">
+            <img src="https://flagcdn.com/w40/gb.png" width="30" height="20" alt="English flag"> English
+          </a>
+        </li>
+        <li>
+          <a class="dropdown-item" href="#" (click)="switchLanguage('ua')">
+            <img src="https://flagcdn.com/w40/ua.png" width="30" height="20" alt="Ukrainian flag"> Українська
+          </a>
+        </li>
+      </ul>
+    </div>
+
+
     <div class="hero-container">
-      <h1 class="hero-title gachi-title">Gachi Donations</h1>
-      <p class="gachi-subtitle">Support your favorite stream with style and legendary phrases 💬</p>
-<!--      <img-->
-<!--        ngSrc="https://cdn3.emoji.gg/emojis/gachiBASS.png"-->
-<!--        alt="GachiBASS"-->
-<!--        class="gachi-image"-->
-<!--        width="30"-->
-<!--        height="30"-->
-<!--        style="object-fit: cover;"-->
-<!--      />-->
+      <h1 class="hero-title gachi-title">{{ 'TITLE' | translate }}</h1>
+      <p class="gachi-subtitle, hero-description">{{ 'SUBTITLE' | translate }}</p>
     </div>
     <form #f="ngForm" (ngSubmit)="onSubmit(f)">
       <div class="form-group mb-3">
-        <input class="form-control" name="donatorNickname" #donatorNicknameInput="ngModel"
+        <input class="form-control"
+               name="donatorNickname"
+               #donatorNicknameInput="ngModel"
                [(ngModel)]="donatorNickname"
                id="donatorName"
-               placeholder="Enter your nickname"
+               placeholder="{{ 'NICKNAME_PLACEHOLDER' | translate }}"
                [required]="true"
                [maxlength]="30">
-        <div *ngIf="donationMessageInput.invalid && donationMessageInput.touched" class="text-danger mt-1 small">
-          <div *ngIf="donatorNicknameInput.errors?.['required']">Nickname is required.</div>
-          <div *ngIf="donatorNicknameInput.errors?.['maxlength']">Max length is 30 characters.</div>
+        <div *ngIf="donatorNicknameInput.invalid && donatorNicknameInput.touched" class="text-danger mt-1 small">
+          <div *ngIf="donatorNicknameInput.errors?.['required']">{{ 'VALIDATION.REQUIRED_NICKNAME' | translate }}</div>
+          <div *ngIf="donatorNicknameInput.errors?.['maxlength']">{{ 'VALIDATION.MAXLENGTH_NICKNAME' | translate }}</div>
         </div>
       </div>
 
@@ -39,13 +59,13 @@
                   [maxlength]="150"
                   [pattern]="'^(?!.*(http(s)?:\\/\\/|www\\.|\\S+\\.(com|net|ua)(\\s|$))).*$'"
                   #donationMessageInput="ngModel"
-                  placeholder="Enter donation"
+                  placeholder="{{ 'DONATION_PLACEHOLDER' | translate }}"
                   rows="3"
                   style="resize: none;"></textarea>
         <div *ngIf="donationMessageInput.invalid && donationMessageInput.touched" class="text-danger mt-1 small">
-          <div *ngIf="donationMessageInput.errors?.['required']">Donation message is required.</div>
-          <div *ngIf="donationMessageInput.errors?.['maxlength']">Max length is 150 characters.</div>
-          <div *ngIf="donationMessageInput.errors?.['pattern']">URLs are not allowed in the message.</div>
+          <div *ngIf="donationMessageInput.errors?.['required']">{{ 'VALIDATION.REQUIRED_MESSAGE' | translate }}</div>
+          <div *ngIf="donationMessageInput.errors?.['maxlength']">{{ 'VALIDATION.MAXLENGTH_MESSAGE' | translate }}</div>
+          <div *ngIf="donationMessageInput.errors?.['pattern']">{{ 'VALIDATION.INVALID_LINK' | translate }}</div>
         </div>
       </div>
 
@@ -55,7 +75,7 @@
             <div *ngFor="let phrase of row" class="mb-1">
               <button type="button"
                       class="btn phrase-button btn-sm w-100 d-flex align-items-center justify-content-between"
-                      (click)="addPhraseToMessage(phrase)">
+                      (click)="insertPhraseIntoMessage(phrase)">
                 <span class="text-truncate d-block flex-grow-1 me-2">{{ phrase }}</span>
                 <span class="play-icon" (click)="playPhraseAudio(phrase); $event.stopPropagation()">▶️</span>
               </button>
@@ -65,17 +85,17 @@
       </div>
 
       <div class="d-grid gap-2 mt-3">
-        <button type="button" (click)="testPhrase()" class="btn btn-primary" [disabled]="f.invalid">
-          🎧 Listen to your donation
+        <button type="button" class="btn btn-primary" (click)="testPhrase()" [disabled]="f.invalid">
+          {{ 'LISTEN_BUTTON' | translate }}
         </button>
         <button type="submit" class="btn btn-primary" [disabled]="f.invalid">
-          💸 Submit
+          {{ 'SUBMIT_BUTTON' | translate }}
         </button>
       </div>
     </form>
     <footer class="gachi-footer text-center mt-5">
       <a href="mailto:your.email@example.com">your.email&#64;example.com</a>
-      <p class="small text-secondary">Made with 💜 for the Gachi community</p>
+      <p class="small text-secondary">{{ 'FOOTER' | translate }}</p>
     </footer>
   </div>
 </div>
