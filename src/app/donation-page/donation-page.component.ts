@@ -1,7 +1,7 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
 import {FormsModule, NgForm, NgModel} from '@angular/forms';
 import {HttpClient} from '@angular/common/http';
-import {NgForOf, NgIf} from '@angular/common';
+import {NgForOf, NgIf, NgOptimizedImage} from '@angular/common';
 import {DonationRequestDto} from '../model/DonationRequestDto';
 
 @Component({
@@ -9,7 +9,8 @@ import {DonationRequestDto} from '../model/DonationRequestDto';
   imports: [
     FormsModule,
     NgForOf,
-    NgIf
+    NgIf,
+    NgOptimizedImage
   ],
   templateUrl: './donation-page.component.html',
   styleUrl: './donation-page.component.css'
@@ -22,8 +23,8 @@ export class DonationPageComponent implements OnInit {
   public donatorNickname: string = '';
   @ViewChild('donationMessageInput') donationMessageInput!: NgModel;
   private currentAudio: HTMLAudioElement | null = null;
-  private host = 'https://1e19-213-109-233-73.ngrok-free.app'
-  // private host = 'http://localhost:8080'
+  // private host = 'https://1e19-213-109-233-73.ngrok-free.app'
+  private host = 'http://localhost:8080'
 
   constructor(private http: HttpClient) {
 
