@@ -61,6 +61,7 @@ button.btn-primary:hover {
   color: #ffffff;
 }
 
+
 .gachi-title {
   font-family: 'Orbitron', sans-serif;
   font-size: 2.5rem;
@@ -70,6 +71,15 @@ button.btn-primary:hover {
   -webkit-text-fill-color: transparent;
   animation: pulse 2s infinite;
   margin-bottom: 0.5rem;
+}
+
+@media (max-width: 768px) {
+  .gachi-title {
+    font-size: 2rem; /* Slightly reduce font size on mobile */
+    text-shadow: 0 0 4px rgba(255, 255, 255, 0.9); /* Slightly stronger shadow on mobile for better clarity */
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
 }
 
 .gachi-subtitle {
