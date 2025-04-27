@@ -23,8 +23,8 @@ export class DonationPageComponent implements OnInit {
   public donatorNickname: string = '';
   @ViewChild('donationMessageInput') donationMessageInput!: NgModel;
   private currentAudio: HTMLAudioElement | null = null;
-  // private host = 'https://1e19-213-109-233-73.ngrok-free.app'
-  private host = 'http://localhost:8080'
+  private host = 'https://1e19-213-109-233-73.ngrok-free.app'
+  // private host = 'http://localhost:8080'
 
   constructor(private http: HttpClient) {
 
