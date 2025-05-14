@@ -1,9 +1,9 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
-import { FormsModule, NgForm, NgModel } from '@angular/forms';
-import { HttpClient } from '@angular/common/http';
-import { NgForOf, NgIf, NgOptimizedImage } from '@angular/common';
-import { DonationRequestDto } from '../model/DonationRequestDto';
-import { TranslatePipe, TranslateService } from '@ngx-translate/core';
+import {Component, OnInit, ViewChild} from '@angular/core';
+import {FormsModule, NgForm, NgModel} from '@angular/forms';
+import {HttpClient} from '@angular/common/http';
+import {NgForOf, NgIf} from '@angular/common';
+import {TranslatePipe, TranslateService} from '@ngx-translate/core';
+import {InvoiceResponse} from '../model/InvoicePayment';
 
 @Component({
   selector: 'app-donation-page',
@@ -11,8 +11,7 @@ import { TranslatePipe, TranslateService } from '@ngx-translate/core';
     FormsModule,
     NgForOf,
     NgIf,
-    TranslatePipe,
-    NgOptimizedImage
+    TranslatePipe
   ],
   templateUrl: './donation-page.component.html',
   styleUrls: ['./donation-page.component.css']
@@ -26,8 +25,8 @@ export class DonationPageComponent implements OnInit {
   @ViewChild('donationMessageInput') donationMessageInput!: NgModel;
   private currentAudio: HTMLAudioElement | null = null;
   currentLang: string = 'en';
-  private host = 'https://1e19-213-109-233-73.ngrok-free.app';
-  // private host = 'http://localhost:8080'
+  private host = 'https://dd4d-213-109-232-65.ngrok-free.app';
+  //private host = 'http://localhost:8080'
 
   constructor(private http: HttpClient, private translate: TranslateService) {
     this.translate.setDefaultLang('en');
@@ -56,7 +55,7 @@ export class DonationPageComponent implements OnInit {
 
   private splitIntoRows(rowCount: number): void {
     // Clear previous grid
-    this.gachiPhrasesGrid = Array.from({ length: rowCount }, () => []);
+    this.gachiPhrasesGrid = Array.from({length: rowCount}, () => []);
 
     // First, we need to distribute the phrases row by row without breaking their order
     const phrasesPerRow = Math.ceil(this.gachiPhrases.length / rowCount);
@@ -99,15 +98,49 @@ export class DonationPageComponent implements OnInit {
   }
 
   public onSubmit(form: NgForm): void {
-    const requestDto: DonationRequestDto = {
-      donatorNickname: this.donatorNickname,
-      donationMessage: this.donationMessage.replaceAll('  ', ' ')
+    this.startWayforpayPayment()
+  }
+
+  startWayforpayPayment(): void {
+
+    const body = {
+      amount: 100,
+      ccy: 980,
+      merchantPaymInfo: {
+        reference: 'DONATE12345',
+        destination: 'Донат для стріму',
+        comment: 'Дякую за підтримку!'
+      },
+      redirectUrl: 'https://ostapmelnychuk.github.io/GachiDonationFront/',
+      webHookUrl: 'https://dd4d-213-109-232-65.ngrok-free.app/payment',
+      validity: 3600,
+      paymentType: 'debit',
     };
 
-    console.log('Sending donation:', requestDto);
+    this.http.post<{ donationId: string }>(this.host + '/gachi/donations', {
+      donationMessage: this.donationMessage,
+      donatorNickname: this.donatorNickname
+    }).subscribe(response => {
+      const donationId = response.donationId;
+      body.merchantPaymInfo.reference = donationId
 
-    this.http.post(this.host + '/translate', requestDto).subscribe();
+      // Then include only this short ID in the serviceUrl
+      const serviceUrl = `https://1e19-213-109-233-73.ngrok-free.app/payment?donationId=${encodeURIComponent(donationId)}`;
+      this.http.post<InvoiceResponse>('https://api.monobank.ua/api/merchant/invoice/create', body, {
+        headers: {
+          'X-Token': 'mJc8tHGodyBbtZXJ6hoaa6A',
+          'Content-Type': 'application/json'
+        }
+      }).subscribe(response => {
+        console.log(response);
+        console.log(response.pageUrl)
+        window.location.href = response.pageUrl;
+      });
+
+    });
+
   }
+
 
   playPhraseAudio(phrase: string): void {
     this.stopCurrentAudio();
