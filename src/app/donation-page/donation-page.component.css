@@ -238,3 +238,8 @@ button.btn-primary:hover {
 .dropdown-item img {
   margin-right: 8px;
 }
+
+.btn-dark {
+  background-color: #000; /* Like Apple/Google buttons */
+  border: none;
+}

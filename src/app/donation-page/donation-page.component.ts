@@ -3,7 +3,6 @@ import {FormsModule, NgForm, NgModel} from '@angular/forms';
 import {HttpClient} from '@angular/common/http';
 import {NgForOf, NgIf} from '@angular/common';
 import {TranslatePipe, TranslateService} from '@ngx-translate/core';
-import {InvoiceResponse} from '../model/InvoicePayment';
 
 @Component({
   selector: 'app-donation-page',
@@ -26,6 +25,8 @@ export class DonationPageComponent implements OnInit {
   private currentAudio: HTMLAudioElement | null = null;
   currentLang: string = 'en';
   private host = 'https://dd4d-213-109-232-65.ngrok-free.app';
+  amount: number = 10;
+
   //private host = 'http://localhost:8080'
 
   constructor(private http: HttpClient, private translate: TranslateService) {
@@ -103,42 +104,14 @@ export class DonationPageComponent implements OnInit {
 
   startWayforpayPayment(): void {
 
-    const body = {
-      amount: 100,
-      ccy: 980,
-      merchantPaymInfo: {
-        reference: 'DONATE12345',
-        destination: 'Донат для стріму',
-        comment: 'Дякую за підтримку!'
-      },
-      redirectUrl: 'https://ostapmelnychuk.github.io/GachiDonationFront/',
-      webHookUrl: 'https://dd4d-213-109-232-65.ngrok-free.app/payment',
-      validity: 3600,
-      paymentType: 'debit',
-    };
 
-    this.http.post<{ donationId: string }>(this.host + '/gachi/donations', {
+    this.http.post<{ pageUrl: string }>(this.host + '/payment/donations', {
       donationMessage: this.donationMessage,
-      donatorNickname: this.donatorNickname
+      donatorNickname: this.donatorNickname,
+      amount: this.amount,
     }).subscribe(response => {
-      const donationId = response.donationId;
-      body.merchantPaymInfo.reference = donationId
-
-      // Then include only this short ID in the serviceUrl
-      const serviceUrl = `https://1e19-213-109-233-73.ngrok-free.app/payment?donationId=${encodeURIComponent(donationId)}`;
-      this.http.post<InvoiceResponse>('https://api.monobank.ua/api/merchant/invoice/create', body, {
-        headers: {
-          'X-Token': 'mJc8tHGodyBbtZXJ6hoaa6A',
-          'Content-Type': 'application/json'
-        }
-      }).subscribe(response => {
-        console.log(response);
-        console.log(response.pageUrl)
-        window.location.href = response.pageUrl;
-      });
-
+      window.location.href = response.pageUrl;
     });
-
   }
 
 

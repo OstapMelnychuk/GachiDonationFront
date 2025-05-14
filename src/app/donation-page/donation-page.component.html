@@ -69,6 +69,23 @@
         </div>
       </div>
 
+      <div class="form-group mb-3">
+        <input type="number"
+               class="form-control"
+               name="amount"
+               id="amount"
+               [(ngModel)]="amount"
+               #amountInput="ngModel"
+               placeholder="{{'AMOUNT_PLACEHOLDER' | translate}}"
+               [required]="true"
+               min="1"
+               step="1">
+        <div *ngIf="amountInput.invalid && amountInput.touched" class="text-danger mt-1 small">
+          <div *ngIf="amountInput.errors?.['required']">{{'VALIDATION.REQUIRED_AMOUNT' | translate }}</div>
+          <div *ngIf="amountInput.errors?.['min']">{{'VALIDATION.MIN_AMOUNT' | translate }}</div>
+        </div>
+      </div>
+
       <div class="container px-0 mb-3">
         <div class="row row-cols-2 row-cols-sm-3 row-cols-md-4 g-2">
           <div class="col" *ngFor="let row of gachiPhrasesGrid">
@@ -88,8 +105,10 @@
         <button type="button" class="btn btn-primary" (click)="testPhrase()" [disabled]="f.invalid">
           {{ 'LISTEN_BUTTON' | translate }}
         </button>
-        <button type="submit" class="btn btn-primary" [disabled]="f.invalid">
-          {{ 'SUBMIT_BUTTON' | translate }}
+        <button type="submit" class="btn btn-primary align-items-center justify-content-center gap-2" [disabled]="f.invalid">
+          <span>{{ 'SUBMIT_BUTTON' | translate }}</span>
+          <img src="https://cdn-icons-png.flaticon.com/512/6124/6124998.png" alt="GPay" class="ms-2" height="50" />
+          <img src="https://download.logo.wine/logo/Apple_Pay/Apple_Pay-Logo.wine.png" class="ms-1" alt="ApplePay" height="40" />
         </button>
       </div>
     </form>
