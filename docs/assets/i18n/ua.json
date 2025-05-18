@@ -9,7 +9,7 @@
   "AMOUNT_PLACEHOLDER" : "Сума донату (₴)",
   "VALIDATION": {
     "REQUIRED_NICKNAME": "Нікнейм обов'язковий.",
-    "MAXLENGTH_NICKNAME": "Максимальна довжина — 30 символів.",
+    "MAXLENGTH_NICKNAME": "Максимальна довжина — 20 символів.",
     "REQUIRED_MESSAGE": "Повідомлення обов'язкове.",
     "MAXLENGTH_MESSAGE": "Максимальна довжина — 150 символів.",
     "INVALID_LINK": "Посилання заборонені у повідомленні.",

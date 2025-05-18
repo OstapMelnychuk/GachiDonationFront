@@ -9,7 +9,7 @@
   "AMOUNT_PLACEHOLDER" : "Donation amount (₴)",
   "VALIDATION": {
     "REQUIRED_NICKNAME": "Nickname is required.",
-    "MAXLENGTH_NICKNAME": "Max length is 30 characters.",
+    "MAXLENGTH_NICKNAME": "Max length is 20 characters.",
     "REQUIRED_MESSAGE": "Donation message is required.",
     "MAXLENGTH_MESSAGE": "Max length is 150 characters.",
     "INVALID_LINK": "URLs are not allowed in the message.",

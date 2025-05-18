@@ -43,7 +43,7 @@
                id="donatorName"
                placeholder="{{ 'NICKNAME_PLACEHOLDER' | translate }}"
                [required]="true"
-               [maxlength]="30">
+               [maxlength]="20">
         <div *ngIf="donatorNicknameInput.invalid && donatorNicknameInput.touched" class="text-danger mt-1 small">
           <div *ngIf="donatorNicknameInput.errors?.['required']">{{ 'VALIDATION.REQUIRED_NICKNAME' | translate }}</div>
           <div *ngIf="donatorNicknameInput.errors?.['maxlength']">{{ 'VALIDATION.MAXLENGTH_NICKNAME' | translate }}</div>
@@ -71,15 +71,17 @@
 
       <div class="form-group mb-3">
         <input type="number"
+               inputmode="numeric"
+               pattern="\d*"
+               step="1"
+               min="1"
                class="form-control"
                name="amount"
                id="amount"
                [(ngModel)]="amount"
                #amountInput="ngModel"
                placeholder="{{'AMOUNT_PLACEHOLDER' | translate}}"
-               [required]="true"
-               min="1"
-               step="1">
+               [required]="true">
         <div *ngIf="amountInput.invalid && amountInput.touched" class="text-danger mt-1 small">
           <div *ngIf="amountInput.errors?.['required']">{{'VALIDATION.REQUIRED_AMOUNT' | translate }}</div>
           <div *ngIf="amountInput.errors?.['min']">{{'VALIDATION.MIN_AMOUNT' | translate }}</div>
